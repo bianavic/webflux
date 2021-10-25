@@ -1,5 +1,6 @@
 package com.udemy.webflux.controller;
 
+import com.udemy.webflux.dto.InputFailedValidationResponse;
 import com.udemy.webflux.dto.ResponseDTO;
 import com.udemy.webflux.exception.InputValidationException;
 import com.udemy.webflux.service.ReactiveMathService;
@@ -23,10 +24,22 @@ public class ReactiveMathValidationController {
 
     @GetMapping("square/{input}/throw")
     public Mono<ResponseDTO> findSquare(@PathVariable int input) {
-
         if (input < 10 || input > 20)
             throw new InputValidationException(input);
         return this.reactiveMathService.findSquare(input);
+    }
+
+    @GetMapping("square/{input}/mono-error")
+    public Mono<ResponseDTO> monoError(@PathVariable int input) {
+        return Mono.just(input)
+                .handle((integer, sink) -> {
+                    if (integer >= 10 && integer <= 20)
+                        sink.next(integer);
+                    else
+                        sink.error(new InputValidationException(integer));
+                })
+                .cast(Integer.class)
+                .flatMap(i -> this.reactiveMathService.findSquare(i));
     }
 
 }
