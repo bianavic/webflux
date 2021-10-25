@@ -25,4 +25,5 @@ public class MathController {
   public List<ResponseDTO> multiplicationTable(@PathVariable int input) {
     return this.mathService.multiplicationTable(input);
   }
+
 }
