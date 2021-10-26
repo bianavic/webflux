@@ -1,6 +1,6 @@
 package com.udemy.webflux.controller;
 
-import com.udemy.webflux.dto.MultplyRequestDTO;
+import com.udemy.webflux.dto.MultiplyRequestDTO;
 import com.udemy.webflux.dto.ResponseDTO;
 import com.udemy.webflux.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +40,10 @@ public class ReactiveMathController {
   }
 
   @PostMapping("multiply")
-  public Mono<ResponseDTO> multply(@RequestBody Mono<MultplyRequestDTO> requestDTOMono,
-                                   @RequestHeader Map<String, String> headers) {
+  public Mono<ResponseDTO> multiply(@RequestBody Mono<MultiplyRequestDTO> requestDTOMono,
+                                    @RequestHeader Map<String, String> headers) {
     System.out.println(headers);
     return this.reactiveMathService.multiply(requestDTOMono);
-
   }
 
 }

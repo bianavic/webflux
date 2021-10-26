@@ -1,6 +1,6 @@
 package com.udemy.webflux.service;
 
-import com.udemy.webflux.dto.MultplyRequestDTO;
+import com.udemy.webflux.dto.MultiplyRequestDTO;
 import com.udemy.webflux.dto.ResponseDTO;
 import java.time.Duration;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ReactiveMathService {
         .map(i -> new ResponseDTO(i * input));
   }
 
-  public Mono<ResponseDTO> multiply(Mono<MultplyRequestDTO> dtoMono) {
+  public Mono<ResponseDTO> multiply(Mono<MultiplyRequestDTO> dtoMono) {
     return dtoMono
             .map(dto -> dto.getFirst() * dto.getSecond())
             .map(ResponseDTO::new);

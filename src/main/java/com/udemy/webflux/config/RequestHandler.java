@@ -1,5 +1,6 @@
 package com.udemy.webflux.config;
 
+import com.udemy.webflux.dto.MultiplyRequestDTO;
 import com.udemy.webflux.dto.ResponseDTO;
 import com.udemy.webflux.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,14 @@ public class RequestHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.TEXT_EVENT_STREAM)
                 .body(responseFlux, ResponseDTO.class);
+    }
+
+    public Mono<ServerResponse> multiplyHandler(ServerRequest serverRequest) {
+        Mono<MultiplyRequestDTO> requestDTOMono = serverRequest.bodyToMono(MultiplyRequestDTO.class);
+        Mono<ResponseDTO> responseDTOMono = this.reactiveMathService.multiply(requestDTOMono);
+        return ServerResponse.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .body(responseDTOMono, ResponseDTO.class);
     }
 
 }
