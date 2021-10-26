@@ -2,6 +2,7 @@ package com.udemy.webflux.config;
 
 import com.udemy.webflux.dto.MultiplyRequestDTO;
 import com.udemy.webflux.dto.ResponseDTO;
+import com.udemy.webflux.exception.InputValidationException;
 import com.udemy.webflux.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -47,6 +48,15 @@ public class RequestHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.TEXT_EVENT_STREAM)
                 .body(responseDTOMono, ResponseDTO.class);
+    }
+
+    public Mono<ServerResponse> squareHandlerWithValidation(ServerRequest serverRequest) {
+        int input = Integer.valueOf(serverRequest.pathVariable("input"));
+        if (input < 10 || input > 20) {
+            return Mono.error(new InputValidationException(input)); // error signal
+        }
+        Mono<ResponseDTO> responseDTOMono = this.reactiveMathService.findSquare(input);
+        return ServerResponse.ok().body(responseDTOMono, ResponseDTO.class);
     }
 
 }
