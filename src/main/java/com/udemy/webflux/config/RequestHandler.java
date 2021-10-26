@@ -3,6 +3,7 @@ package com.udemy.webflux.config;
 import com.udemy.webflux.dto.ResponseDTO;
 import com.udemy.webflux.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -29,6 +30,14 @@ public class RequestHandler {
         int input = Integer.valueOf(serverRequest.pathVariable("input")); // accessing the variable
         Flux<ResponseDTO> responseFlux = this.reactiveMathService.multiplicationTable(input); // building the pipeline
         return ServerResponse.ok().body(responseFlux, ResponseDTO.class);
+    }
+
+    public Mono<ServerResponse> tableStreamHandler(ServerRequest serverRequest) {
+        int input = Integer.valueOf(serverRequest.pathVariable("input")); // accessing the variable
+        Flux<ResponseDTO> responseFlux = this.reactiveMathService.multiplicationTable(input); // building the pipeline
+        return ServerResponse.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .body(responseFlux, ResponseDTO.class);
     }
 
 }
