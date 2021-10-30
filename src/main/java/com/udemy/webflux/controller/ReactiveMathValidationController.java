@@ -32,24 +32,24 @@ public class ReactiveMathValidationController {
     @GetMapping("square/{input}/mono-error")
     public Mono<ResponseDTO> monoError(@PathVariable int input) {
         return Mono.just(input)
-                .handle((integer, sink) -> {
-                    if (integer >= 10 && integer <= 20)
-                        sink.next(integer);
-                    else
-                        sink.error(new InputValidationException(integer));
-                })
-                .cast(Integer.class)
-                .flatMap(i -> this.reactiveMathService.findSquare(i));
+            .handle((integer, sink) -> {
+                if (integer >= 10 && integer <= 20)
+                    sink.next(integer);
+                else
+                    sink.error(new InputValidationException(integer));
+            })
+            .cast(Integer.class)
+            .flatMap(i -> this.reactiveMathService.findSquare(i));
     }
 
     // no exception, no error signal, no controller advice
     @GetMapping("square/{input}/assignment")
     public Mono<ResponseEntity<ResponseDTO>> assignment(@PathVariable int input) {
         return Mono.just(input)
-                .filter(i -> i >= 10 && i <= 20)
-                .flatMap(i -> this.reactiveMathService.findSquare(i))
-                .map(i -> ResponseEntity.ok(i))
-                .defaultIfEmpty(ResponseEntity.badRequest().build());
+            .filter(i -> i >= 10 && i <= 20)
+            .flatMap(i -> this.reactiveMathService.findSquare(i))
+            .map(i -> ResponseEntity.ok(i))
+            .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 
 }

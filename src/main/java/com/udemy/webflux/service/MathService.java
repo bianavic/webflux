@@ -20,4 +20,5 @@ public class MathService {
         .mapToObj(i -> new ResponseDTO(i * input))
         .collect(Collectors.toList());
   }
+
 }

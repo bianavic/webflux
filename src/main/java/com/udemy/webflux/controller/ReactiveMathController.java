@@ -41,7 +41,7 @@ public class ReactiveMathController {
 
   @PostMapping("multiply")
   public Mono<ResponseDTO> multiply(@RequestBody Mono<MultiplyRequestDTO> requestDTOMono,
-                                    @RequestHeader Map<String, String> headers) {
+      @RequestHeader Map<String, String> headers) {
     System.out.println(headers);
     return this.reactiveMathService.multiply(requestDTOMono);
   }
