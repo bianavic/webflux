@@ -1,5 +1,6 @@
 package com.udemy.webflux.config;
 
+import java.util.function.BiFunction;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -11,27 +12,31 @@ public class CalculatorHandler {
   // multiple handlers intentionally
   // calculator/{a}/{b}
   public Mono<ServerResponse> additionHandler(ServerRequest request) {
-    int a = getValue(request, "a");
-    int b = getValue(request, "b");
-    return ServerResponse.ok().bodyValue(a + b);
+    return process(request, (a, b) -> ServerResponse.ok().bodyValue(a + b));
   }
 
   public Mono<ServerResponse> subtractionHandler(ServerRequest request) {
-    int a = getValue(request, "a");
-    int b = getValue(request, "b");
-    return ServerResponse.ok().bodyValue(a - b);
+    return process(request, (a, b) -> ServerResponse.ok().bodyValue(a - b));
   }
 
   public Mono<ServerResponse> multiplicationHandler(ServerRequest request) {
-    int a = getValue(request, "a");
-    int b = getValue(request, "b");
-    return ServerResponse.ok().bodyValue(a * b);
+    return process(request, (a, b) -> ServerResponse.ok().bodyValue(a * b));
   }
 
   public Mono<ServerResponse> divisionHandler(ServerRequest request) {
+    return process(request, (a, b) ->
+        b != 0 ? ServerResponse.ok().bodyValue(a / b) :
+            ServerResponse.badRequest().bodyValue("b can not be 0")
+    );
+  }
+
+  private Mono<ServerResponse> process(ServerRequest request,
+      BiFunction<Integer, Integer, Mono<ServerResponse>> operationLogic) {
+
     int a = getValue(request, "a");
     int b = getValue(request, "b");
-    return ServerResponse.ok().bodyValue(a / b);
+
+    return operationLogic.apply(a, b);
   }
 
   private int getValue(ServerRequest request, String key) {
