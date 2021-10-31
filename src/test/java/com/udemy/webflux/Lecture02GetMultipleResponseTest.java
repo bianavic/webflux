@@ -27,4 +27,19 @@ public class Lecture02GetMultipleResponseTest extends BaseTest{
         .verifyComplete();
   }
 
+  @Test
+  public void fluxStreamTest() {
+
+    Flux<ResponseDTO> responseFlux = this.webClient
+        .get()
+        .uri("reactive-math/table/{number}/stream", 5)
+        .retrieve()
+        .bodyToFlux(ResponseDTO.class)
+        .doOnNext(System.out::println);
+
+    StepVerifier.create(responseFlux)
+        .expectNextCount(10)
+        .verifyComplete();
+  }
+
 }
