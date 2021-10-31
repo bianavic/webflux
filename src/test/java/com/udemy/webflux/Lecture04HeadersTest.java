@@ -29,6 +29,10 @@ public class Lecture04HeadersTest extends BaseTest{
     StepVerifier.create(responseMono)
         .expectNextCount(1)
         .verifyComplete();
+
+    StepVerifier.create(responseMono)
+        .expectNextCount(1)
+        .verifyComplete();
   }
 
   private MultiplyRequestDTO buildRequestDto(int a, int b) {
