@@ -20,8 +20,8 @@ public class Lecture04HeadersTest extends BaseTest{
         .post()
         .uri("reactive-math/multiply")
         .bodyValue(buildRequestDto(5, 2))
-        // .headers(h -> h.set("someKey", "someValue"))
-        .headers(h -> h.setBasicAuth("username", "password"))
+        .headers(h -> h.set("someKey", "someValue"))
+        // .headers(h -> h.setBasicAuth("username", "password"))
         .retrieve()
         .bodyToMono(ResponseDTO.class)
         .doOnNext(System.out::println);
